@@ -12,9 +12,6 @@ app = Flask(__name__)
 line_bot_api = LineBotApi("cKtDec+oMDzR+76vJ8PoLAc9EAIMz5K8QEugP3899a/59RPJD0eRNQh71MFIC1UoKKYvUDGyNjNOgCPsSm7+zhdULh/yp0zdRva7y6lOqZ3C3FSLMRRFXEXN7l9Cr1nNQ2bFJLuL7QShVyQimnRilQdB04t89/1O/w1cDnyilFU=")
 handler = WebhookHandler("fe0d85ead292f342d68123c9033c430a")
 
-pair_count = 0
-pair_combinations = []
-
 @app.route("/callback", methods=["POST"])
 def callback():
     signature = request.headers["x-line-signature"]
@@ -30,6 +27,7 @@ def callback():
 def handle_message(event):
     global pair_count, pair_combinations
     message = ""
+
     if event.message.text == "!r":
         pair_count = 0
         pair_combinations = []
@@ -47,7 +45,7 @@ def handle_message(event):
             message = "参加人数が入力されていません。"
     elif event.message.text.isdigit():
         X = int(event.message.text)
-        if X >= 12 and X <= 100:
+        if 12 <= X and X <= 100:
             pair_count = int(X / 2)
             message = "ペア数：{}\n".format(pair_count)
 
@@ -60,10 +58,6 @@ def handle_message(event):
                     message += "最初のペア：\n"
                 message += "ペア{}:{}と{}\n".format(i + 1, pair_combination[0][0] + 1, pair_combination[0][1] + 1)
             message += "\nペアが決定されました。試合を始める場合は、\"!s\"を入力してください。"
-        else:
-            message = "12以上100以下の整数を半角で入力してください。"
-    else:
-        message = "正しい形式で整数を入力してください。"
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
