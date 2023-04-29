@@ -11,6 +11,8 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('cKtDec+oMDzR+76vJ8PoLAc9EAIMz5K8QEugP3899a/59RPJD0eRNQh71MFIC1UoKKYvUDGyNjNOgCPsSm7+zhdULh/yp0zdRva7y6lOqZ3C3FSLMRRFXEXN7l9Cr1nNQ2bFJLuL7QShVyQimnRilQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('fe0d85ead292f342d68123c9033c430a')
 
+participant_list = []
+
 
 @app.route('/callback', methods=['POST'])
 def callback():
@@ -27,25 +29,19 @@ def callback():
 def handle_message(event):
     global participant_list
 
-    #参加人数の登録
+    # 参加人数の登録
     if event.message.text == "!r":
-        message = TextSendMessage(text="参加人数を入力してください")
+        message = TextSendMessage(text="参加人数を入力してください(12<=N<=100 人まで)")
         line_bot_api.reply_message(event.reply_token, message)
 
-        @handler.add(MessageEvent, message=TextMessage)
-        def handle_participant_number(event):
-            try:
-                n = int(event.message.text)
-            except ValueError:
-                message = TextSendMessage(text="参加人数は数字で入力してください")
-                line_bot_api.reply_message(event.reply_token, message)
-                return
+    # 参加人数の受け取りとリスト更新
+    elif isinstance(event.message.text, str) and event.message.text.isdecimal():
+        n = int(event.message.text)
+        participant_list = ['participant' + str(i) for i in range(1, n+1)]
+        message = TextSendMessage(text="参加者リストを更新しました")
+        line_bot_api.reply_message(event.reply_token, message)
 
-            participant_list = ['participant' + str(i) for i in range(1, n+1)]
-            message = TextSendMessage(text="参加者リストを更新しました")
-            line_bot_api.reply_message(event.reply_token, message)
-
-    #参加人数から組み合わせを計算
+    # 参加人数から組み合わせを計算
     elif event.message.text == "!s":
         num_pairs = int(len(participant_list) / 2)
         if num_pairs < 6:
@@ -72,8 +68,6 @@ def handle_message(event):
     else:
         pass
 
-
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-
