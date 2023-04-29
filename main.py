@@ -37,7 +37,7 @@ def handle_message(event):
     # 参加人数の受け取りとリスト更新
     elif isinstance(event.message.text, str) and event.message.text.isdecimal():
         n = int(event.message.text)
-        participant_list = ['participant' + str(i) for i in range(1, n+1)]
+        participant_list = ['番号 : ' + str(i) for i in range(1, n+1)]
         message = TextSendMessage(text="参加者リストを更新しました")
         line_bot_api.reply_message(event.reply_token, message)
 
@@ -55,8 +55,13 @@ def handle_message(event):
         assignment_list = [(random_participants[i], random_participants[i+1]) for i in range(0, len(random_participants), 2)]
 
         message = ""
+        court_assignments = [("ペア1", "ペア2"), ("ペア3", "ペア4"), ("ペア5", "ペア6")]
+        for i, court_assignment in enumerate(court_assignments):
+            message += "{}コート : {}\n {}\n {}\n".format(i+1, court_assignment[0], court_assignment[1], court_assignment[2])
+
+        message += "\n"
         for i, court_assignments in enumerate(assignment_list):
-            message += "{}コート : {} と {}\n".format(i+1, court_assignments[0], court_assignments[1])
+            message += "ペア {} : No {} と No {}\n".format(i+1, court_assignments[0], court_assignments[1])
 
         line_bot_api.reply_message(
             event.reply_token,
