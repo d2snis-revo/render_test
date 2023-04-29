@@ -56,7 +56,8 @@ def handle_message(event):
 
         message = "ペア 1・2 は 1 コート\nペア 3・4 は 2 コート\nペア 5・6 は 3 コート\n"
 
-        message += "-------{}試合目-------\n".format(cnt:=cnt+1)
+        cnt+=1
+        message += "-------{}試合目-------\n".format(cnt)
         for i, court_assignments in enumerate(assignment_list):
             message += "ペア{} : {} と {}\n".format(i+1, court_assignments[0], court_assignments[1])
 
