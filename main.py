@@ -57,13 +57,13 @@ def handle_message(event):
             court3 = assignment_list[i+4:i+6]
             message = "-----------------------\n"
             for j in range(2):
-                message += "|     {:.2}    |     {:.2}   |\n".format(court1[j][0], court1[j][1])
+                message += "|     {:.2}    |     {:.2}   |\n".format(court1[j][0].zfill(2), court1[j][1].zfill(2))
             message += "-----------------------\n"
             for j in range(2):
-                message += "|     {:.2}    |     {:.2}   |\n".format(court2[j][0], court2[j][1])
+                message += "|     {:.2}    |     {:.2}   |\n".format(court2[j][0].zfill(2), court2[j][1].zfill(2))
             message += "-----------------------\n"
             for j in range(2):
-                message += "|     {:.2}    |     {:.2}   |\n".format(court3[j][0], court3[j][1])
+                message += "|     {:.2}    |     {:.2}   |\n".format(court3[j][0].zfill(2), court3[j][1].zfill(2))
             message += "-----------------------\n"
             line_bot_api.reply_message(
                 event.reply_token,
