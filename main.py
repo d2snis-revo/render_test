@@ -51,20 +51,29 @@ def handle_message(event):
         random.shuffle(random_participants)
         assignment_list = [(random_participants[i], random_participants[i+1]) for i in range(0, len(random_participants), 2)]
 
+        #出力部分
         for i in range(0, len(assignment_list), 6):
             court1 = assignment_list[i:i+2]
             court2 = assignment_list[i+2:i+4]
             court3 = assignment_list[i+4:i+6]
+            
+            message = "・1コート\n"
             message = "-----------------------\n"
             for j in range(2):
-                message += "|     {:.2}    |     {:.2}   |\n".format(court1[j][0].zfill(2), court1[j][1].zfill(2))
+                message += "|     {}    |     {}   |\n".format(court1[j][0].zfill(2), court1[j][1].zfill(2))
             message += "-----------------------\n"
+            
+            message = "・2コート\n"
+            message = "-----------------------\n"
             for j in range(2):
-                message += "|     {:.2}    |     {:.2}   |\n".format(court2[j][0].zfill(2), court2[j][1].zfill(2))
+                message += "|     {}    |     {}   |\n".format(court2[j][0].zfill(2), court2[j][1].zfill(2))
             message += "-----------------------\n"
+            
+            message = "・3コート\n"
+            message = "-----------------------\n"
             for j in range(2):
-                message += "|     {:.2}    |     {:.2}   |\n".format(court3[j][0].zfill(2), court3[j][1].zfill(2))
-            message += "-----------------------\n"
+                message += "|     {}    |     {}   |\n".format(court3[j][0].zfill(2), court3[j][1].zfill(2))
+            message += "-----------------------"
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
