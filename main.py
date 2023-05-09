@@ -80,6 +80,33 @@ def handle_message(event):
             )
 
         assignment_list = []
+        
+    # 番号の削除
+    elif event.message.text == "!d":
+        message = TextSendMessage(text="削除する番号を入力してください.")
+        line_bot_api.reply_message(event.reply_token, message)
+
+    elif isinstance(event.message.text, str) and event.message.text.isdecimal() and len(participant_list) > 0:
+        deleted_index = int(event.message.text) - 1
+        if deleted_index >= 0 and deleted_index < len(participant_list):
+            deleted_player = participant_list.pop(deleted_index)
+            message = TextSendMessage(text="{}を参加者リストから削除しました.".format(deleted_player))
+        else:
+            message = TextSendMessage(text="正しい番号を入力してください.")
+
+        line_bot_api.reply_message(event.reply_token, message)
+
+    # 参加者リストの表示
+    elif event.message.text == "!h":
+        if len(participant_list) > 0:
+            message = "現在の参加者リスト:\n" + "\n".join(participant_list)
+        else:
+            message = "現在, 参加者はいません."
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=message)
+        )
 
     else:
         pass
