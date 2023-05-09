@@ -12,7 +12,6 @@ handler = WebhookHandler('fe0d85ead292f342d68123c9033c430a')
 
 participant_list = []
 
-
 @app.route('/callback', methods=['POST'])
 def callback():
     signature = request.headers['x-line-signature']
@@ -23,28 +22,27 @@ def callback():
         abort(400)
     return 'OK'
 
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global participant_list
 
     # 参加人数の登録
     if event.message.text == "!r":
-        message = TextSendMessage(text="参加人数 N を入力してください。\n※注意:(N >= 12)")
+        message = TextSendMessage(text="参加人数を入力してください.")
         line_bot_api.reply_message(event.reply_token, message)
 
     # 参加人数の受け取りとリスト更新
     elif isinstance(event.message.text, str) and event.message.text.isdecimal():
         n = int(event.message.text)
         participant_list = [str(i) for i in range(1, n+1)]
-        message = TextSendMessage(text="参加者リストを更新しました。")
+        message = TextSendMessage(text="参加人数を更新しました.")
         line_bot_api.reply_message(event.reply_token, message)
 
     # 参加人数から組み合わせを計算
     elif event.message.text == "!s":
         num_pairs = int(len(participant_list) / 2)
         if num_pairs < 6:
-            message = TextSendMessage(text="参加人数が少なすぎます。")
+            message = TextSendMessage(text="参加人数が少なすぎます.")
             line_bot_api.reply_message(event.reply_token, message)
             return
 
@@ -53,14 +51,24 @@ def handle_message(event):
         random.shuffle(random_participants)
         assignment_list = [(random_participants[i], random_participants[i+1]) for i in range(0, len(random_participants), 2)]
 
-        message = "ペア 1・2 は 1 コート\nペア 3・4 は 2 コート\nペア 5・6 は 3 コート\n"
-        for i, court_assignments in enumerate(assignment_list):
-            message += "ペア{} : {} と {}\n".format(i+1, court_assignments[0], court_assignments[1])
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message)
-        )
+        for i in range(0, len(assignment_list), 6):
+            court1 = assignment_list[i:i+2]
+            court2 = assignment_list[i+2:i+4]
+            court3 = assignment_list[i+4:i+6]
+            message = "-----------------------\n"
+            for j in range(2):
+                message += "|     {:.2}    |     {:.2}   |\n".format(court1[j][0], court1[j][1])
+            message += "-----------------------\n"
+            for j in range(2):
+                message += "|     {:.2}    |     {:.2}   |\n".format(court2[j][0], court2[j][1])
+            message += "-----------------------\n"
+            for j in range(2):
+                message += "|     {:.2}    |     {:.2}   |\n".format(court3[j][0], court3[j][1])
+            message += "-----------------------\n"
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=message)
+            )
 
         assignment_list = []
 
