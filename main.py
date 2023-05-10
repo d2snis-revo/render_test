@@ -29,13 +29,15 @@ def handle_message(event):
     # 参加人数の登録
     if event.message.text == "!r":
         message = TextSendMessage(text="参加人数を入力してください.")
+        input_flag = True
         line_bot_api.reply_message(event.reply_token, message)
 
     # 参加人数の受け取りとリスト更新
-    elif isinstance(event.message.text, str) and event.message.text.isdecimal():
+    elif isinstance(event.message.text, str) and event.message.text.isdecimal() and input_flag:
         n = int(event.message.text)
         participant_list = [str(i) for i in range(1, n+1)]
         message = TextSendMessage(text="参加人数を更新しました.")
+        input_flag = False
         line_bot_api.reply_message(event.reply_token, message)
 
     # 参加人数から組み合わせを計算
@@ -84,13 +86,15 @@ def handle_message(event):
     # 番号の削除
     elif event.message.text == "!d":
         message = TextSendMessage(text="削除する番号を入力してください.")
+        delete_flag = True
         line_bot_api.reply_message(event.reply_token, message)
 
-    elif isinstance(event.message.text, str) and event.message.text.isdecimal() and len(participant_list) > 0:
+    elif isinstance(event.message.text, str) and event.message.text.isdecimal() and len(participant_list) > 0 and delete_flag:
         deleted_index = int(event.message.text) - 1
         if deleted_index >= 0 and deleted_index < len(participant_list):
             deleted_player = participant_list.pop(deleted_index)
             message = TextSendMessage(text="{}を参加者リストから削除しました.".format(deleted_player))
+            delete_flag = False
         else:
             message = TextSendMessage(text="正しい番号を入力してください.")
 
@@ -99,7 +103,7 @@ def handle_message(event):
     # 参加者リストの表示
     elif event.message.text == "!h":
         if len(participant_list) > 0:
-            message = "現在の参加者リスト:\n" + "\n".join(participant_list)
+            message = "・現在の参加者リスト\n" + "\n".join(participant_list)
         else:
             message = "現在, 参加者はいません."
 
