@@ -11,6 +11,8 @@ line_bot_api = LineBotApi('cKtDec+oMDzR+76vJ8PoLAc9EAIMz5K8QEugP3899a/59RPJD0eRN
 handler = WebhookHandler('fe0d85ead292f342d68123c9033c430a')
 
 participant_list = []
+input_flag = False
+delete_flag = False
 
 @app.route('/callback', methods=['POST'])
 def callback():
@@ -25,7 +27,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global participant_list
-
+    global input_flag
+    global delete_flag
+    
     # 参加人数の登録
     if event.message.text == "!r":
         message = TextSendMessage(text="参加人数を入力してください.")
