@@ -80,6 +80,7 @@ def handle_message(event):
             for j in range(2):
                 message += "|     {}    |     {}   |\n".format(court3[j][0].zfill(2), court3[j][1].zfill(2))
             message += "-------------------"
+            
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
@@ -111,6 +112,19 @@ def handle_message(event):
         else:
             message = "現在, 参加者はいません."
 
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=message)
+        )
+        
+    # 操作コマンドの説明
+    elif event.message.text == "!info":
+        message = "以下に示すコマンドで動作します.\nこれら以外は, なにもイベントが発生しません.\n"
+        message += "・!r...参加人数を登録, 更新します.\n"
+        message += "・!d...参加人数を削除, 更新します.\n"
+        message += "・!h...参加者リスト(登録されている番号)を表示します.\n"
+        message += "・!s...試合の組み合わせを表示します.\n"
+        
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
