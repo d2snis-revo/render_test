@@ -64,22 +64,22 @@ def handle_message(event):
             court3 = assignment_list[i+4:i+6]
             
             message = "・1コート\n"
-            message += "-------------------\n"
+            message += "-----------------------\n"
             for j in range(2):
                 message += "|     {}    |     {}   |\n".format(court1[j][0].zfill(2), court1[j][1].zfill(2))
-            message += "-------------------\n"
+            message += "-----------------------\n"
             
             message += "・2コート\n"
-            message += "-------------------\n"
+            message += "-----------------------\n"
             for j in range(2):
                 message += "|     {}    |     {}   |\n".format(court2[j][0].zfill(2), court2[j][1].zfill(2))
-            message += "-------------------\n"
+            message += "-----------------------\n"
             
             message += "・3コート\n"
-            message += "-------------------\n"
+            message += "-----------------------\n"
             for j in range(2):
                 message += "|     {}    |     {}   |\n".format(court3[j][0].zfill(2), court3[j][1].zfill(2))
-            message += "-------------------"
+            message += "-----------------------"
             
             line_bot_api.reply_message(
                 event.reply_token,
@@ -122,8 +122,8 @@ def handle_message(event):
         message = "以下に示すコマンドで動作します.\nこれら以外は, なにもイベントが発生しません.\n"
         message += "・!r...参加人数を登録, 更新します.\n"
         message += "・!d...参加人数を削除, 更新します.\n"
-        message += "・!h...参加者リスト(登録されている番号)を表示します.\n"
-        message += "・!s...試合の組み合わせを表示します.\n"
+        message += "・!h...参加者リストを表示します.\n"
+        message += "・!s...試合の組み合わせを表示します."
         
         line_bot_api.reply_message(
             event.reply_token,
