@@ -98,7 +98,7 @@ def handle_message(event):
         deleted_index = int(event.message.text) - 1
         if deleted_index >= 0 and deleted_index < len(participant_list):
             deleted_player = participant_list.pop(deleted_index)
-            message = TextSendMessage(text="{}を参加者リストから削除しました.".format(deleted_player))
+            message = TextSendMessage(text="参加者リストから削除しました.")
             delete_flag = False
         else:
             message = TextSendMessage(text="正しい番号を入力してください.")
