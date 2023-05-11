@@ -39,7 +39,7 @@ def handle_message(event):
     # 参加人数の受け取りとリスト更新
     elif isinstance(event.message.text, str) and event.message.text.isdecimal() and input_flag:
         n = int(event.message.text)
-        participant_list = [str(i) for i in range(1, n+1)]
+        participant_list = [str(i).zfill(2) for i in range(1, n+1)]
         message = TextSendMessage(text="参加人数を更新しました.")
         input_flag = False
         line_bot_api.reply_message(event.reply_token, message)
